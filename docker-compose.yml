@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+    image: fhbaptista/fc-ddd-domain-repo
+    volumes:
+      - .:/app
+    tty: true
+    stdin_open: true
+    command: ["bash"]
