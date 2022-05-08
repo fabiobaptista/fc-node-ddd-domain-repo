@@ -45,11 +45,24 @@ export default class OrderRepo implements OrderRepoInterface {
     );
   }
   async find(id: string): Promise<Order> {
-    const orderModel = await OrderModel.findOne({ where: { id } });
+
+    let orderModel;
+    try {
+      orderModel = await OrderModel.findOne({
+         where: { id },
+         include: [
+          { model: OrderItemModel }
+        ],
+         rejectOnEmpty: true
+      });
+    } catch (error) {
+      throw new Error("Order not found");
+    }
+
     return new Order(
       orderModel.id,
       orderModel.customerId,
-      orderModel.items.map(i => new OrderItem(
+      orderModel.items?.map(i => new OrderItem(
         i.id,
         i.name,
         i.price,
@@ -59,7 +72,11 @@ export default class OrderRepo implements OrderRepoInterface {
     );
   }
   async findAll(): Promise<Order[]> {
-    const orderModels = await OrderModel.findAll();
+    const orderModels = await OrderModel.findAll({
+      include: [
+        { model: OrderItemModel }
+      ],
+    });
     return orderModels.map((order) =>
     new Order(
       order.id,

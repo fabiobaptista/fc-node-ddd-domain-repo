@@ -39,24 +39,18 @@ export default class CustomerRepo implements CustomerRepoInterface {
   async find(id: string): Promise<Customer> {
     let customerModel;
     try {
-      customerModel = await CustomerModel.findOne({
-        where: {
-          id,
-        },
-        rejectOnEmpty: true,
-      });
+      customerModel = await CustomerModel.findOne({ where: { id }, rejectOnEmpty: true });
     } catch (error) {
       throw new Error("Customer not found");
     }
 
     const customer = new Customer(id, customerModel.name);
-    const address = new Address(
+    customer.changeAddress(new Address(
       customerModel.street,
       customerModel.number,
       customerModel.zipcode,
       customerModel.city
-    );
-    customer.changeAddress(address);
+    ));
     return customer;
   }
 

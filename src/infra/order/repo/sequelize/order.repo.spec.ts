@@ -136,21 +136,28 @@ describe("Order repository test", () => {
     const productRepo = new ProductRepo();
     const orderRepo = new OrderRepo();
 
+    // Arrange
+    // Customer
     const customer = new Customer("1", "Fabio");
     customer.changeAddress(new Address("Street", 1, "Zipcode", "City"));
     await customerRepo.create(customer);
 
+    // Product
     const product = new Product("1", "Product", 10);
     await productRepo.create(product);
 
-    const ordemItem = new OrderItem("1", product.name, product.price, product.id, 2);
-
-    const order = new Order("1", customer.id, [ordemItem]);
-
+    // Order
+    const order = new Order(
+      "1",
+      customer.id,
+      [ new OrderItem("1", product.name, product.price, product.id, 2) ]
+    );
     await orderRepo.create(order);
 
+    //Act
     const orderResult = await orderRepo.find(order.id);
 
-    expect(order).toStrictEqual(orderResult);
+    //Assert
+    expect(order).toEqual(orderResult);
   });
 });
