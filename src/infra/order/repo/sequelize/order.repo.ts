@@ -1,4 +1,4 @@
-import OrderRepoInterface from "../../../../domain/order/repo/order.repo";
+import OrderRepoInterface from "../../../../domain/order/repo/order.repo.interface";
 import Order from "../../../../domain/order/entity/order";
 import OrderItemModel from "./ordem-item.model";
 import OrderModel from "./order.model";
@@ -25,24 +25,41 @@ export default class OrderRepo implements OrderRepoInterface {
     );
   }
   async update(entity: Order): Promise<void> {
-    await OrderModel.update(
-      {
-        customerId: entity.customerId,
-        items: entity.items.map(i => ({ 
-          id: i.id,
-          name: i.name,
-          productId: i.productId,
-          quatity: i.quantity,
-          price: i.price
-        })),
-        total: entity.total()
-      },
-      {
-        where: {
-          id: entity.id,
-        },
-      }
-    );
+    try{
+
+      await OrderModel.sequelize.transaction(async (transaction) => {
+        //Clear Items
+        await OrderItemModel.destroy({
+          where: { orderId: entity.id },
+          transaction: transaction,
+        });
+        
+        const items = entity.items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          productId: item.productId,
+          quantity: item.quantity,
+          orderId: entity.id,
+        }));
+        
+        // Add Items
+        await OrderItemModel.bulkCreate(items, { transaction: transaction });
+        
+        // Update Order
+        await OrderModel.update(
+          { total: entity.total() },
+          { 
+            where: { id: entity.id },
+            transaction: transaction 
+          }
+        );
+
+      });
+
+    } catch(err) {
+      console.log(err)
+    }
   }
   async find(id: string): Promise<Order> {
 

@@ -1,5 +1,5 @@
 import Customer from "../../../../domain/customer/entity/customer";
-import CustomerRepoInterface from "../../../../domain/customer/repo/customer.repo";
+import CustomerRepoInterface from "../../../../domain/customer/repo/customer.repo.interface";
 import Address from "../../../../domain/customer/value-objects/address";
 import CustomerModel from "./customer.model";
 

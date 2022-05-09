@@ -40,10 +40,14 @@ export default class Order {
   }
 
   get items(): OrderItem[] {
-    return this._items;
+    return this._items.map(i => i);
+  }
+
+  addOrderItem(item: OrderItem): void {
+    this._items.push(item);
   }
 
   total(): number {
-    return this._items.reduce((acc, item) => acc + item.price, 0);
+    return this._items.reduce((acc, item) => acc + item.priceTotal, 0);
   }
 }

@@ -1,4 +1,4 @@
-import Customer from "../../customer/entity/customer";
+import CustomerFactory from "../../customer/factory/customer.factory";
 import Order from "../entity/order";
 import OrderItem from "../entity/order-item";
 import OrderService from "./order.service";
@@ -6,7 +6,7 @@ import OrderService from "./order.service";
 describe("Order service unit tets", () => {
   
   it("should place an order", () => {
-    const customer = new Customer("1", "Fabio");
+    const customer = CustomerFactory.create("Fabio");
     const item1 = new OrderItem("1", "Item 1", 10, "1", 1);
 
     const order = OrderService.placeOrder(customer, [item1]);

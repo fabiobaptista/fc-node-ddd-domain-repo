@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import Customer from "../../../../domain/customer/entity/customer";
+import CustomerFactory from "../../../../domain/customer/factory/customer.factory";
 import Address from "../../../../domain/customer/value-objects/address";
 import CustomerModel from "./customer.model";
 import CustomerRepo from "./customer.repo";
@@ -25,8 +26,8 @@ describe("Customer repository test", () => {
 
   it("should create a customer", async () => {
     const customerRepo = new CustomerRepo();
-    const customer = new Customer("1", "Fabio");
-    customer.changeAddress(new Address("Street", 1, "Zipcode", "City"));
+    const customer = CustomerFactory.create("Fabio", new Address("Street", 1, "Zipcode", "City"));
+    
     await customerRepo.create(customer);
 
     const customerModel = await CustomerModel.findOne({ where: { id: customer.id } });
@@ -45,12 +46,14 @@ describe("Customer repository test", () => {
 
   it("should update a customer", async () => {
     const customerRepo = new CustomerRepo();
-    const customer = new Customer("1", "Fabio");
-    customer.changeAddress(new Address("Street", 1, "Zipcode", "City"));
+    const customer = CustomerFactory.create("Fabio", new Address("Street", 1, "Zipcode", "City"));
+    
     await customerRepo.create(customer);
 
     customer.changeName("Fabio Baptista");
+
     await customerRepo.update(customer);
+    
     const customerModel = await CustomerModel.findOne({ where: { id: customer.id } });
 
     expect(customerModel.toJSON()).toStrictEqual({
@@ -67,8 +70,8 @@ describe("Customer repository test", () => {
 
   it("should find a customer", async () => {
     const customerRepo = new CustomerRepo();
-    const customer = new Customer("1", "Customer");
-    customer.changeAddress(new Address("Street", 1, "Zipcode", "City"));
+    const customer = CustomerFactory.create("Customer", new Address("Street", 1, "Zipcode", "City"));
+    
     await customerRepo.create(customer);
 
     const customerResult = await customerRepo.find(customer.id);
@@ -86,13 +89,10 @@ describe("Customer repository test", () => {
 
   it("should find all customers", async () => {
     const customerRepo = new CustomerRepo();
-    const customer1 = new Customer("1", "Fabio");
-    customer1.changeAddress(new Address("Street", 1, "Zipcode", "City"));
+    const customer1 = CustomerFactory.create("Fabio", new Address("Street", 1, "Zipcode", "City"));
     customer1.addRewardPoints(10);
-    customer1.activate();
-
-    const customer2 = new Customer("2", "Fabio");
-    customer2.changeAddress(new Address("Street", 2, "Zipcode", "City"));
+    
+    const customer2 = CustomerFactory.create("Fabio", new Address("Street", 2, "Zipcode", "City"));
     customer2.addRewardPoints(20);
 
     await customerRepo.create(customer1);
