@@ -9,18 +9,18 @@ import OrderItemModel from "./ordem-item.model";
 export default class OrderModel extends Model {
   @PrimaryKey
   @Column
-  declare id: string;
+  id: string;
 
   @ForeignKey(() => CustomerModel)
   @Column({ allowNull: false })
-  declare customerId: string;
+  customerId: string;
 
   @BelongsTo(() => CustomerModel)
-  declare customer: CustomerModel;
+  customer: CustomerModel;
 
   @HasMany(() => OrderItemModel)
-  declare items: OrderItemModel[];
+  items: OrderItemModel[];
 
   @Column({ allowNull: false })
-  declare total: number;
+  total: number;
 }

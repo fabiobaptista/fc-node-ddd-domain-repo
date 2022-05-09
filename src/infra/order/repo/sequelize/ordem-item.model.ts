@@ -9,28 +9,28 @@ import OrderModel from "./order.model";
 export default class OrderItemModel extends Model {
   @PrimaryKey
   @Column
-  declare id: string;
+  id: string;
 
   @ForeignKey(() => ProductModel)
   @Column({ allowNull: false })
-  declare productId: string;
+  productId: string;
 
   @BelongsTo(() => ProductModel)
-  declare product: ProductModel;
+  product: ProductModel;
 
   @ForeignKey(() => OrderModel)
   @Column({ allowNull: false })
-  declare orderId: string;
+  orderId: string;
 
   @BelongsTo(() => OrderModel)
-  declare order: ProductModel;
+  order: ProductModel;
 
   @Column({ allowNull: false })
-  declare quantity: number;
+  quantity: number;
 
   @Column({ allowNull: false })
-  declare name: string;
+  name: string;
 
   @Column({ allowNull: false })
-  declare price: number;
+  price: number;
 }

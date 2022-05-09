@@ -7,26 +7,26 @@ import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 export default class CustomerModel extends Model {
   @PrimaryKey
   @Column
-  declare id: string;
+  id: string;
 
   @Column({ allowNull: false })
-  declare name: string;
+  name: string;
 
   @Column({ allowNull: false })
-  declare street: string;
+  street: string;
 
   @Column({ allowNull: false })
-  declare number: number;
+  number: number;
 
   @Column({ allowNull: false })
-  declare zipcode: string;
+  zipcode: string;
 
   @Column({ allowNull: false })
-  declare city: string;
+  city: string;
 
   @Column({ allowNull: false })
-  declare active: boolean;
+  active: boolean;
 
   @Column({ allowNull: false })
-  declare rewardPoints: number;
+  rewardPoints: number;
 }
